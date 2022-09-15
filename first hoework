@@ -1,0 +1,16 @@
+distance=100 
+i=1
+num=6
+while i<=num:
+	forward(distance)
+	right(60)
+	i=i+1
+
+num=12
+while i<=num:
+	left(60)
+	forward(distance)
+	right(120)
+	forward(distance)
+	i=i+1
+done()
