@@ -1,42 +1,27 @@
-from socket import *
-from tkinter import *
-import tkinter
-
-def server():
-	IP = ''
-	PORT = 50000
-	BUFLEN = 512
-
-	listenSocket = socket(AF_INET,SOCK_STREAM)
-	listenSocket.bind((IP,PORT))
-
-	listenSocket.listen(8)
-	print(f'?????????????????{PORT}??????????????...')
-
-	dataSocket,addr =listenSocket.accept()
-	print('????????????????:',addr)
-
-	while True:
-		receved = dataSocket.recv(BUFLEN)
-
-		if not receved:
-			break
-
-		info = receved.decode()
-		print(f'?????????????{info}')
-
-		dataSocket.send(f'??????????????:{info}'.encode())
-
-	dataSocket.close()
-	listenSocket.close()
-
-window =tkinter.Tk()
-window.title('serverOperation')
-window.geometry('1000x200')
-
-button=tkinter.Button(window,text='主机上操作',bg='#CC33CC', command=lambda : server())
-button.pack()
-
-top=mainloop()
-
-
+#鏈嶅姟鍣ㄧ浠ｇ爜
+import socket
+s=socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+s.bind(('127.0.0.1',1031))
+s.listen(1)
+print('Waiting for connecting...')
+filename = 'D:/lyue.txt'
+print('I want to get the file %s!' % filename)
+(conn,addr)=s.accept()
+conn.send(filename.encode('utf-8'))
+str1=conn.recv(1024)
+str2=str1.decode('utf-8')
+if str2 == 'no':
+	print('To get the file %s is failed!' % filename)
+else:
+	conn.send(b'I am ready!')
+	temp = filename.split('/')
+	myname = 'my_' + temp[len(temp) - 1]
+	size = 1024
+	with open(myname, 'wb') as f:
+		while True:
+			data = conn.recv(size)
+			f.write(data)
+			if len(data) < size:
+				break
+	print('The downloaded file is %s.' % myname)
+s.close
